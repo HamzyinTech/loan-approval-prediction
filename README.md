@@ -1,177 +1,74 @@
-Loan Prediction Project
-📌 Project Overview
+🏦 Loan Approval Prediction System Loan Approval Prediction - Machine Learning Project
 
-This project demonstrates an end-to-end machine learning pipeline to predict loan approval using real-world financial data. The goal is to help lenders identify low- and high-risk applicants, reducing defaults and improving decision-making.
+This notebook presents an end-to-end machine learning workflow for predicting loan approval using applicant financial and demographic data.
 
-Key Objectives:
+The objective is to classify applicants as low-risk (approved) or high-risk (rejected) to support data-driven lending decisions. 📌 Overview
 
-Predict whether a loan will be approved or rejected
+This project is an end-to-end machine learning system for credit risk classification, designed to predict whether a loan application will be approved based on applicant financial and demographic information.
 
-Highlight financial risk associated with loan applications
+The system simulates real-world banking decision processes by analyzing historical loan data and identifying high-risk and low-risk applicants, supporting more consistent and data-driven lending decisions.
 
-Provide actionable insights for banking decision-making
+🎯 Objective
 
-🛠️ Tools & Technologies
+Predict loan approval outcome (Approved / Rejected) Identify key factors influencing loan decisions Support financial risk assessment using machine learning Improve decision efficiency in lending processes
 
-Languages: Python (Pandas, NumPy)
+📊 Dataset Features Feature Description Gender Applicant gender Married Marital status Dependents Number of dependents Education Education level Self_Employed Employment status ApplicantIncome Applicant income CoapplicantIncome Co-applicant income LoanAmount Requested loan amount Loan_Amount_Term Loan repayment duration Credit_History Past credit record Property_Area Location category (Urban/Semiurban/Rural)
 
-Machine Learning: Scikit-learn (Logistic Regression, Random Forest)
+🧠 Machine Learning Pipeline
 
-Data Visualization: Matplotlib, Seaborn
+The project follows a structured end-to-end ML workflow:
 
-Data Handling: Missing value imputation, Label Encoding, scaling, class imbalance handling
+Data Cleaning Missing values handled using median (numerical) and mode (categorical) Feature Engineering Label encoding for categorical variables Feature Scaling StandardScaler applied to numerical features Model Training Logistic Regression Random Forest Classifier Model Evaluation Accuracy Precision / Recall F1-score
 
-🧩 Data Preprocessing
+📈 Model Performance Model Accuracy Notes Logistic Regression ~78% Stable baseline model Random Forest ~77% Better at capturing complex patterns
 
-Missing values handled using median for numeric features and mode for categorical features
+Random Forest performed better in identifying approved loans, making it more suitable for reducing missed approvals in financial decisions.
 
-Categorical variables encoded using Label Encoding
+💼 Business Impact Helps financial institutions reduce default risk Improves consistency in loan approval decisions Identifies important financial factors affecting creditworthiness Supports data-driven lending strategies 🧩 Project Structure
 
-Features scaled using StandardScaler for models that require it
+Loan_Prediction_Project/
 
-Target variable: Loan_Status (0 = Rejected, 1 = Approved)
+│
 
-📊 Results & Analysis
+├── models/
 
-Model Performance on Test Set:
+│ ├── rf_model.pkl
 
-Model	Accuracy	Recall (Rejected)	Recall (Approved)
-Logistic Regression	78%	Moderate	High
-Random Forest	77%	42%	96%
+│ ├── scaler.pkl
 
-Observations:
+│
 
-Random Forest captures non-linear relationships and performs well across classes.
+├── notebooks/
 
-High recall for approved loans ensures low-risk applicants are correctly identified.
+│ └── training.ipynb
 
-Moderate recall for rejected loans highlights financial risk areas, guiding risk-aware decision-making.
+│
 
-💼 Business Impact
+├── data/
 
-Financial Risk Assessment: Identifies risky applicants before granting loans, reducing defaults.
+│
 
-Decision Support: Predictions can inform loan approvals, prioritizing safety and profitability.
+├── requirements.txt
 
-Feature Insights: Important factors influencing loan approval include Credit_History, ApplicantIncome, and LoanAmount.
+└── README.md
 
-🎯 Key Learnings
+🚀 How to Run This Project
 
-Accuracy alone is insufficient for imbalanced financial datasets
+Clone Repository git clone https://github.com/HamzyinTech/loan-approval-prediction.git cd loan-approval-prediction
+Install Dependencies pip install -r requirements.txt
+Load Model and Scaler import joblib import pandas as pd
+model = joblib.load("models/rf_model.pkl") scaler = joblib.load("models/scaler.pkl") 4. Make Predictions new_applicant = pd.DataFrame([{ 'Gender': 1, 'Married': 0, 'Dependents': 0, 'Education': 1, 'Self_Employed': 0, 'ApplicantIncome': 5000, 'CoapplicantIncome': 2000, 'LoanAmount': 150, 'Loan_Amount_Term': 360, 'Credit_History': 1, 'Property_Area': 2 }])
 
-Handling class imbalance improves risk sensitivity at the cost of overall accuracy
+numeric_cols = [ 'ApplicantIncome', 'CoapplicantIncome', 'LoanAmount', 'Loan_Amount_Term' ]
 
-Model evaluation must align with business objectives, not just statistical metrics
+new_applicant[numeric_cols] = scaler.transform(new_applicant[numeric_cols])
 
-Tree-based models (Random Forest) outperform linear models in capturing complex patterns
+prediction = model.predict(new_applicant)
 
+if prediction[0] == 1: print("✅ Loan Approved") else: print("❌ Loan Rejected")
 
-✅ Conclusion
+🔮 Future Improvements Hyperparameter tuning (GridSearchCV / RandomizedSearchCV) Advanced models (XGBoost, LightGBM) Model interpretability using SHAP values Deployment as a web application (Streamlit / Flask) API integration for real-time predictions
 
-This project demonstrates a complete ML workflow from preprocessing to model evaluation and business interpretation.
+📌 Key Takeaways Feature engineering significantly improves model performance Class imbalance impacts recall and must be handled carefully Tree-based models capture complex financial patterns effectively Model interpretability is essential in financial applications 👨‍💻 Author
 
-Future improvements could include:
-
-Advanced feature engineering
-
-Ensemble or boosting methods (e.g., XGBoost, LightGBM)
-
-Deployment as a decision-support system for lenders
-
-
-📌 How to Run
-
-Clone the repository
-
-Install dependencies:
-
-pip install -r requirements.txt
-
-
-Open notebook.ipynb to explore preprocessing, modeling, and evaluation steps
-
-
-
-
-
-📈📈 Predicting a New Applicant
-
-import pandas as pd
-import joblib
-
-# Load trained model 
-rf_model = joblib.load("models/rf_model.pkl")
-
-new_applicant = pd.DataFrame([{
-    'Gender': 1,
-    'Married': 0,
-    'Dependents': 0,
-    'Education': 1,
-    'Self_Employed': 0,
-    'ApplicantIncome': 5000,
-    'CoapplicantIncome': 2000,
-    'LoanAmount': 150,
-    'Loan_Amount_Term': 360,
-    'Credit_History': 1,
-    'Property_Area': 2
-}])
-
-# Make prediction
-prediction = rf_model.predict(new_applicant)
-
-# Show result
-if prediction[0] == 1:
-    print("✅ Loan likely to be APPROVED (low financial risk)")
-else:
-    print("⚠️ Loan likely to be REJECTED (high financial risk)")
-
-
-
-
-
-This demonstrates how my trained model can be applied to real applicants to assess financial risk.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+HamzyinTech
